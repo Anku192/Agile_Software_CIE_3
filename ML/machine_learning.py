@@ -1,6 +1,5 @@
-# machine_learning.py
+"""Machine Learning model using California Housing dataset."""
 
-import numpy as np
 import pandas as pd
 
 from sklearn.datasets import fetch_california_housing
@@ -10,32 +9,38 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 def train_model():
+    """Train model and return trained model and scaler."""
     # Load dataset
-    data = fetch_california_housing()
-    df = pd.DataFrame(data.data, columns=data.feature_names)
-    df['Price'] = data.target
+    data = fetch_california_housing(as_frame=True)
+    df = data.frame
 
     # Features & target
-    X = df.drop('Price', axis=1)
-    y = df['Price']
+    x = df.drop("MedHouseVal", axis=1)
+    y = df["MedHouseVal"]
 
     # Split
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.2, random_state=42
     )
 
     # Scale
     scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
+    x_train_scaled = scaler.fit_transform(x_train)
+    x_test_scaled = scaler.transform(x_test)
 
-    # Train model (best performer from your script)
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
-    model.fit(X_train_scaled, y_train)
+    # Train model
+    trained_model = RandomForestRegressor(n_estimators=100, random_state=42)
+    trained_model.fit(x_train_scaled, y_train)
 
-    return model, scaler
+    # Evaluate
+    score = trained_model.score(x_test_scaled, y_test)
+    print("Model Score:", score)
+
+    return trained_model, scaler
 
 
 def predict(model, scaler, input_data):
+    """Predict output for given input data."""
     input_scaled = scaler.transform([input_data])
     prediction = model.predict(input_scaled)
     return float(prediction[0])
@@ -49,3 +54,18 @@ if __name__ == "__main__":
 
     print("ML Prediction:", result)
 
+    import pickle
+
+def ml_model(data):
+    result = sum(data) / len(data)
+
+    # Save model
+    with open("model.pkl", "wb") as f:
+        pickle.dump(result, f)
+
+    return result
+
+
+# run once to generate file
+if __name__ == "__main__":
+    ml_model([1,2,3,4,5])
