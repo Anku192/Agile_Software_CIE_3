@@ -1,9 +1,13 @@
+from models import ml_model, dl_model, qml_model
 import streamlit as st
 import numpy as np
+import mlflow
 
-# -----------------------------
-# Dummy Models
-# -----------------------------
+
+mlflow.set_tracking_uri("http://127.0.0.1:5000")
+mlflow.set_experiment("house-price")
+
+
 def ml_model(data):
     return float(np.mean(data))
 
@@ -14,9 +18,6 @@ def qml_model(data):
     return float((np.mean(data[:2]) % 1))
 
 
-# -----------------------------
-# UI
-# -----------------------------
 st.title("🏠 AI House Price Predictor")
 
 model = st.selectbox(
@@ -30,17 +31,14 @@ input_text = st.text_input(
 )
 
 if st.button("Predict"):
-
     try:
         values = [float(x.strip()) for x in input_text.split(",")]
 
         if model == "Machine Learning":
             result = ml_model(values)
-
         elif model == "Deep Learning":
             result = dl_model(values)
-
-        elif model == "Quantum ML":
+        else:
             if len(values) < 2:
                 st.error("QML needs at least 2 features")
                 st.stop()
@@ -48,5 +46,11 @@ if st.button("Predict"):
 
         st.success(f"Prediction: {result}")
 
+       
+        with mlflow.start_run():
+            mlflow.log_param("model", model)
+            mlflow.log_param("num_features", len(values))
+            mlflow.log_metric("prediction", result)
+
     except:
-        st.error("Invalid input format")
+        st.error("Invalid input")

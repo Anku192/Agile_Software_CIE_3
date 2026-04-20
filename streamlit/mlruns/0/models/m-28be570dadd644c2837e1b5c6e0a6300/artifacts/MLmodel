@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/Prashanth/Agile_Software CIE 3/streamlit/mlruns/0/models/m-28be570dadd644c2837e1b5c6e0a6300/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.13
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.8.0
+    skops_trusted_types: null
+mlflow_version: 3.11.1
+model_id: m-28be570dadd644c2837e1b5c6e0a6300
+model_size_bytes: 435
+model_uuid: m-28be570dadd644c2837e1b5c6e0a6300
+prompts: null
+run_id: 1cc09c8fcb924caebff4be03ad7d4127
+utc_time_created: '2026-04-19 21:06:37.512924'
