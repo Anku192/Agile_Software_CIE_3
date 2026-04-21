@@ -34,3 +34,9 @@ jobs:
         working-directory: ./streamlit
         run: |
           python -m unittest discover -v
+
+      # ──────── NEW: Docker Build Step ────────
+      - name: Build Docker Image
+        working-directory: ./streamlit
+        run: |
+          docker build -t streamlit-app .
