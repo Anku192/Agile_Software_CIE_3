@@ -19,15 +19,18 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
+        working-directory: ./streamlit
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
           pip install pylint
 
       - name: Run Pylint
+        working-directory: ./streamlit
         run: |
           pylint models.py || true
 
       - name: Run Unit Tests
+        working-directory: ./streamlit
         run: |
-          python -m unittest discover
+          python -m unittest discover -v
